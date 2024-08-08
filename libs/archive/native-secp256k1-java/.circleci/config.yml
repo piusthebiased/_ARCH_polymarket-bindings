@@ -1,0 +1,118 @@
+version: 2.1
+commands:
+  do_all:
+    steps:
+      #      - run: cp -r /tmp/_circleci_local_build_repo/* ~/project/
+      #      - run: cp -r /tmp/_circleci_local_build_repo/.circleci ~/project/
+      - run: sudo apt update
+      - run: sudo apt -y install default-jdk
+      - run: conan remote add -f edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/conan
+      - run: conan user -p $ARTIFACTORY_API_KEY -r edwardstock info@edwardstock.com
+      - run: git clone --recursive https://github.com/edwardstock/native-secp256k1-java.git .
+      - run: bash .circleci/setup.sh
+      - run: bash .circleci/deploy.sh
+
+  do_all_centos:
+    steps:
+      #      - run: cp -r /tmp/_circleci_local_build_repo/* ~/project/
+      #      - run: cp -r /tmp/_circleci_local_build_repo/.circleci ~/project/
+      - run: yum -y install java-1.8.0-openjdk-devel
+      - run: conan remote add -f edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/conan
+      - run: conan user -p $ARTIFACTORY_API_KEY -r edwardstock info@edwardstock.com
+      - run: git clone --recursive https://github.com/edwardstock/native-secp256k1-java.git .
+      - run: bash .circleci/setup.sh
+      - run: bash .circleci/deploy.sh
+
+jobs:
+  gcc-4_8_5:
+    docker:
+      - image: docker.edwardstock.com/gcc_dev_el7
+    steps:
+      - do_all_centos
+
+  gcc-5:
+    docker:
+      - image: conanio/gcc5
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+  gcc-6:
+    docker:
+      - image: conanio/gcc6
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+  gcc-7:
+    docker:
+      - image: conanio/gcc7
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+  gcc-8:
+    docker:
+      - image: conanio/gcc8
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+  gcc-9:
+    docker:
+      - image: conanio/gcc9
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+  gcc-10:
+    docker:
+      - image: conanio/gcc10
+        environment:
+          CONAN_CPU_COUNT: 4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+    steps:
+      - do_all
+
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - gcc-4_8_5:
+          context:
+            - remote_tokens
+      - gcc-5:
+          context:
+            - remote_tokens
+      - gcc-6:
+          context:
+            - remote_tokens
+      - gcc-7:
+          context:
+            - remote_tokens
+      - gcc-8:
+          context:
+            - remote_tokens
+      - gcc-9:
+          context:
+            - remote_tokens
+      - gcc-10:
+          context:
+            - remote_tokens

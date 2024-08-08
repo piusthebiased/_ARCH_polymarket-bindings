@@ -1,0 +1,103 @@
+checkout: git clone --recursive https://github.com/edwardstock/native-secp256k1-java.git .
+debug: true
+commands:
+  init_centos:
+    steps:
+      - run: yum -y update
+      - run: yum -y install java-1.8.0-openjdk-devel
+
+  init_fedora:
+    steps:
+      - run: dnf -y update
+      - run: dnf -y install java-1.8.0-openjdk-devel
+
+  init_deb:
+    steps:
+      - run: apt -y update
+      - run: apt -y install apt-transport-https
+      - run: apt -yq install default-jdk
+
+  build_and_package:
+    steps:
+      - run: bash cfg/package_make.sh -t package
+      - run: bash _build/package_upload.sh -t bintray
+
+  make_project:
+    steps:
+      - build_and_package
+
+jobs:
+  centos_el7:
+    image: docker.edwardstock.com/gcc_dev_el7:latest
+    steps:
+      - init_centos
+      - make_project
+
+  centos_el8:
+    image: docker.edwardstock.com/gcc_dev_el8:latest
+    steps:
+      - init_centos
+      - make_project
+
+  fedora_fc32:
+    image: docker.edwardstock.com/gcc_dev_fc32:latest
+    steps:
+      - init_fedora
+      - make_project
+
+  fedora_fc33:
+    image: docker.edwardstock.com/gcc_dev_fc33:latest
+    steps:
+      - init_fedora
+      - make_project
+
+  fedora_fc34:
+    image: docker.edwardstock.com/gcc_dev_fc34:latest
+    steps:
+      - init_fedora
+      - make_project
+
+  debian_jessie:
+    image: docker.edwardstock.com/gcc_dev_debian_jessie:latest
+    steps:
+      - init_deb
+      - make_project
+
+  debian_stretch:
+    image: docker.edwardstock.com/gcc_dev_debian_stretch:latest
+    steps:
+      - init_deb
+      - make_project
+
+  debian_buster:
+    image: docker.edwardstock.com/gcc_dev_debian_buster:latest
+    steps:
+      - init_deb
+      - make_project
+
+  ubuntu_xenial:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_xenial:latest
+    steps:
+      - init_deb
+      - make_project
+
+  ubuntu_bionic:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_bionic:latest
+    steps:
+      - init_deb
+      - make_project
+
+  ubuntu_focal:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_focal:latest
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - init_deb
+      - make_project
+
+  ubuntu_groovy:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_groovy:latest
+    steps:
+      - init_deb
+      - make_project
+
