@@ -1,9 +1,8 @@
 package clob.rest.headers;
 
 import clob.auth.APIKeyCredentials;
-import clob.eip712.ClobAuthDomainStruct;
-import clob.eip712.ClobAuthStruct;
-import cryptography.keys.Key;
+import clob.auth.eip712.ClobAuthDomainStruct;
+import clob.auth.eip712.ClobAuthStruct;
 import cryptography.elliptic.NativeSecp256k1;
 import cryptography.hash.Keccak256;
 import cryptography.keys.KeyPair;

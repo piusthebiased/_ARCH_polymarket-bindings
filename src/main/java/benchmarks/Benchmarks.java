@@ -1,7 +1,7 @@
 package benchmarks;
 
-import clob.eip712.ClobAuthDomainStruct;
-import clob.eip712.ClobAuthStruct;
+import clob.auth.eip712.ClobAuthDomainStruct;
+import clob.auth.eip712.ClobAuthStruct;
 import cryptography.keys.Key;
 import cryptography.elliptic.NativeSecp256k1;
 import cryptography.hash.Keccak256;

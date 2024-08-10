@@ -1,4 +1,4 @@
-package clob.eip712;
+package clob.auth.eip712;
 
 import cryptography.hash.Keccak256;
 import eth.EthUtils;
