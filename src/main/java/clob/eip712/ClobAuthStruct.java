@@ -1,8 +1,7 @@
 package clob.eip712;
 
+import cryptography.keys.Key;
 import cryptography.hash.Keccak256;
-import cryptography.utils.HexUtils;
-import eth.Address;
 import eth.EthUtils;
 import eth.eip712.EIP712HashStruct;
 
@@ -10,7 +9,7 @@ import static eth.eip712.EIP712Signature.*;
 
 // This struct will be the hashStruct(message) part of $encode(\mathbb{B}, \mathbb{S})$ [0]
 public class ClobAuthStruct implements EIP712HashStruct {
-    public Address pubAdr;
+    public Key pubAdr;
     public String timestamp;
     public final int nonce = 0;
     public final String message = "This message attests that I control the given wallet";
@@ -18,7 +17,7 @@ public class ClobAuthStruct implements EIP712HashStruct {
     public ClobAuthStruct() {
         this.timestamp = String.valueOf(getTimestamp());
     }
-    public ClobAuthStruct(Address pubAdr) {
+    public ClobAuthStruct(Key pubAdr) {
         this.pubAdr = pubAdr;
         this.timestamp = String.valueOf(getTimestamp());
     }

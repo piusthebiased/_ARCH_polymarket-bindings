@@ -30,4 +30,10 @@ public class HexUtils {
             sb.append((bytes[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
         return sb.toString();
     }
+
+    public static boolean isHex(String hexString) {
+        if (hexString.charAt(0) != '-' && Character.digit(hexString.charAt(0), 16) == -1) return false;
+        for (int i = 1; i < hexString.length(); i++) if (Character.digit(hexString.charAt(i), 16) == -1) return false;
+        return true;
+    }
 }

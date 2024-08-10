@@ -54,7 +54,7 @@ R9 =0x000000062b24d170 is an oop: java.nio.DirectByteBuffer
 {0x000000062b24d170} - klass: 'java/nio/DirectByteBuffer'
  - ---- fields (total size 8 words):
  - private 'mark' 'I' @12  -1 (ffffffff)
- - 'address' 'J' @16  140561733645952 (1433f680 7fd7)
+ - 'key' 'J' @16  140561733645952 (1433f680 7fd7)
  - private 'position' 'I' @24  32 (20)
  - private 'limit' 'I' @28  32 (20)
  - private 'capacity' 'I' @32  32 (20)
@@ -177,7 +177,7 @@ VM state: not at safepoint (normal execution)
 
 VM Mutex/Monitor currently owned by a thread: None
 
-Heap address: 0x000000060c000000, size: 8000 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Heap key: 0x000000060c000000, size: 8000 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
 
 CDS archive(s) not mapped
 Compressed class space mapped at: 0x0000000800000000-0x0000000840000000, reserved size: 1073741824

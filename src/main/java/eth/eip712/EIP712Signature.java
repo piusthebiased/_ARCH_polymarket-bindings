@@ -1,7 +1,8 @@
 package eth.eip712;
 
 import cryptography.hash.Keccak256;
-import eth.Address;
+import cryptography.keys.Key;
+import cryptography.keys.KeyPair;
 import eth.EthUtils;
 
 // This class provides utility functions for EIP-712
@@ -42,8 +43,8 @@ public class EIP712Signature {
     }
 
     // address adr -> uint160
-    public static byte[] encodeAddress(Address adr) {
-        return EthUtils.concat(new byte[12], Address.ethAddressFromPrivateKey(adr.address()).address());
+    public static byte[] encodeAddress(Key adr) {
+        return EthUtils.concat(new byte[12], adr.key());
     }
 }
 

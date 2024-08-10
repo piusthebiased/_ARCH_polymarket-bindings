@@ -1,4 +1,4 @@
-package clob.headers;
+package clob.rest.headers;
 
 import java.net.http.HttpRequest;
 import java.util.HashMap;

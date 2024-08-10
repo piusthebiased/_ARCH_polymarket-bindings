@@ -2,11 +2,11 @@ package benchmarks;
 
 import clob.eip712.ClobAuthDomainStruct;
 import clob.eip712.ClobAuthStruct;
+import cryptography.keys.Key;
 import cryptography.elliptic.NativeSecp256k1;
 import cryptography.hash.Keccak256;
 import cryptography.utils.HexUtils;
 import cryptography.utils.JniLoader;
-import eth.Address;
 import eth.EthUtils;
 import eth.eip712.EIP712Signature;
 
@@ -27,7 +27,7 @@ public class Benchmarks {
     @State(Scope.Thread)
     public static class BenchmarkState {
         byte[] digest;
-        Address address;
+        Key key;
 
         byte[] bitstring1;
         byte[] bitstring2;
@@ -43,7 +43,7 @@ public class Benchmarks {
 
             // load raw key
             byte[] raw = HexUtils.hexStringToByteArray("aa804c0f4372cc9593c238dd5a0c5dd9151f69b6773bd64dc079a735313a8269");
-            this.address = new Address(raw);
+            this.key = new Key(raw);
 
             this.bitstring1 = raw.clone();
             this.bitstring2 = raw.clone();
@@ -53,7 +53,7 @@ public class Benchmarks {
             byte[] header = EIP712Signature.HEADER;
             byte[] domain = ClobAuthDomainStruct.precomputedHashStruct();
 
-            ClobAuthStruct auth = new ClobAuthStruct(address);
+            ClobAuthStruct auth = new ClobAuthStruct(key);
             byte[] encoding = EthUtils.concat(header, domain, auth.hashStruct());
             this.digest = Keccak256.digest(encoding);
         }
@@ -61,33 +61,38 @@ public class Benchmarks {
 
     @Benchmark
     public void signatureStaticContext(BenchmarkState state) {
-        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(state.context, state.digest, state.address.address());
+        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(state.context, state.digest, state.key.key());
     }
 
-//    @Benchmark
-//    public void recoverableSignatureBenchmark(BenchmarkState state) {
-//        long ctx = NativeSecp256k1.contextCreate();
-//        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(ctx, state.digest, state.address.address());
-//        NativeSecp256k1.contextCleanup(ctx);
-//    }
-//
-//    @Benchmark
-//    public void nonRecoverableSignatureBenchmark(BenchmarkState state) {
-//        long ctx = NativeSecp256k1.contextCreate();
-//        byte[] sig = NativeSecp256k1.sign(ctx, state.digest, state.address.address());
-//        NativeSecp256k1.contextCleanup(ctx);
-//    }
-//
-//    @Benchmark
-//    public void createContextBenchmark(BenchmarkState state) {
-//        long ctx = NativeSecp256k1.contextCreate();
-//        NativeSecp256k1.contextCleanup(ctx);
-//    }
-//
-//    @Benchmark
-//    public void concat3BytesBenchmark(BenchmarkState state) {
-//        EthUtils.concat(state.bitstring1, state.bitstring2, state.bitstring3);
-//    }
+    @Benchmark
+    public void recoverableSignatureBenchmark(BenchmarkState state) {
+        long ctx = NativeSecp256k1.contextCreate();
+        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(ctx, state.digest, state.key.key());
+        NativeSecp256k1.contextCleanup(ctx);
+    }
+
+    @Benchmark
+    public void nonRecoverableSignatureBenchmark(BenchmarkState state) {
+        long ctx = NativeSecp256k1.contextCreate();
+        byte[] sig = NativeSecp256k1.sign(ctx, state.digest, state.key.key());
+        NativeSecp256k1.contextCleanup(ctx);
+    }
+
+    @Benchmark
+    public void keccak256Benchmark(BenchmarkState state) {
+        Keccak256.digest(state.bitstring1);
+    }
+
+    @Benchmark
+    public void createContextBenchmark(BenchmarkState state) {
+        long ctx = NativeSecp256k1.contextCreate();
+        NativeSecp256k1.contextCleanup(ctx);
+    }
+
+    @Benchmark
+    public void concat3BytesBenchmark(BenchmarkState state) {
+        EthUtils.concat(state.bitstring1, state.bitstring2, state.bitstring3);
+    }
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()

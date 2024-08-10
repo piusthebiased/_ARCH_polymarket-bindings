@@ -45,7 +45,7 @@ Note:
 secp256k1_fe_mul_inner:
 	stmfd	sp!, {r4, r5, r6, r7, r8, r9, r10, r11, r14}
 	sub	sp, sp, #48			@ frame=44 + alignment
-	str     r0, [sp, #0]			@ save result address, we need it only at the end
+	str     r0, [sp, #0]			@ save result key, we need it only at the end
 
 	/******************************************
 	 * Main computation code.
@@ -531,7 +531,7 @@ secp256k1_fe_mul_inner:
 secp256k1_fe_sqr_inner:
 	stmfd	sp!, {r4, r5, r6, r7, r8, r9, r10, r11, r14}
 	sub	sp, sp, #48			@ frame=44 + alignment
-	str     r0, [sp, #0]			@ save result address, we need it only at the end
+	str     r0, [sp, #0]			@ save result key, we need it only at the end
 	/******************************************
 	 * Main computation code.
 	 ******************************************
