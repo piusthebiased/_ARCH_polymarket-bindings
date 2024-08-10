@@ -1,8 +1,9 @@
 package cryptography.utils;
 
-public class HexUtils {
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+import java.nio.charset.StandardCharsets;
 
+public class HexUtils {
+    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
     public static String bytesToHexString(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
@@ -21,5 +22,12 @@ public class HexUtils {
                     + Character.digit(s.charAt(i+1), 16));
         }
         return data;
+    }
+
+    public static String toBinary(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * Byte.SIZE);
+        for(int i = 0; i < Byte.SIZE * bytes.length; i++)
+            sb.append((bytes[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
+        return sb.toString();
     }
 }

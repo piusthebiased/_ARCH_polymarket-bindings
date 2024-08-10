@@ -1,5 +1,7 @@
 package cryptography.elliptic;
 
+import cryptography.utils.HexUtils;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -119,7 +121,6 @@ public final class NativeSecp256k1 {
         byteBuff.put(secret);
 
         byte[][] retByteArray;
-
         r.lock();
         try {
             retByteArray = secp256k1_ecdsa_sign(byteBuff, ctx);

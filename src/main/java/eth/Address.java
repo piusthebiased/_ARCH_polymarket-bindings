@@ -5,8 +5,8 @@ import cryptography.hash.Keccak256;
 
 import java.util.Arrays;
 
-public class CryptoUtils {
-    public static byte[] ethAddressFromPrivateKey(byte[] pri) {
+public record Address(byte[] address) {
+    public static Address ethAddressFromPrivateKey(byte[] pri) {
         // private * G -> public
         long ctx = NativeSecp256k1.contextCreate();
         byte[] pub = NativeSecp256k1.computePubkey(ctx, pri, false);
@@ -17,6 +17,6 @@ public class CryptoUtils {
         byte[] digest = Keccak256.digest(concat_pub);
 
         // split Keccak(public)[-20:]
-        return Arrays.copyOfRange(digest, digest.length-20, digest.length);
+        return new Address(Arrays.copyOfRange(digest, digest.length - 20, digest.length));
     }
 }
