@@ -7,7 +7,6 @@ public class APIKeyCredentials {
     public String secret;
     public String passphrase;
 
-
     public APIKeyCredentials(String apiKey, String secret, String passphrase) {
         this.apiKey = apiKey;
         this.secret = secret;

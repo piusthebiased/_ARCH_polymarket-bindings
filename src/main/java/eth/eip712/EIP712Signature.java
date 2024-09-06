@@ -5,6 +5,8 @@ import cryptography.keys.Key;
 import cryptography.keys.KeyPair;
 import eth.EthUtils;
 
+import java.util.Random;
+
 // This class provides utility functions for EIP-712
 public class EIP712Signature {
     public static byte[] HEADER = {0x19, 0x01}; // EIP-712 Structured Message Header [0]
@@ -45,6 +47,13 @@ public class EIP712Signature {
     // address adr -> uint160
     public static byte[] encodeAddress(Key adr) {
         return EthUtils.concat(new byte[12], adr.key());
+    }
+
+    // random U256
+    public static byte[] randomU256() {
+        byte[] buffer = new byte[16];
+        new Random().nextBytes(buffer);
+        return buffer;
     }
 }
 

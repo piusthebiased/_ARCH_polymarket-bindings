@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 @Warmup(iterations = 3, time = 1) 		// Warmup Iteration = 3
 @Measurement(iterations = 8, time = 1) 	// Iteration = 8
-public class Benchmarks {
+public class RandomBenchmarks {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
@@ -67,47 +67,12 @@ public class Benchmarks {
 
     @Benchmark
     public void randomSpeed(BenchmarkState state) {
-
-    }
-
-    @Benchmark
-    public void signatureStaticContext(BenchmarkState state) {
-        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(state.context, state.digest, state.key.key());
-    }
-
-    @Benchmark
-    public void recoverableSignatureBenchmark(BenchmarkState state) {
-        long ctx = NativeSecp256k1.contextCreate();
-        NativeSecp256k1.RecoverableSignature r_sig = NativeSecp256k1.signRecoverableSerialized(ctx, state.digest, state.key.key());
-        NativeSecp256k1.contextCleanup(ctx);
-    }
-
-    @Benchmark
-    public void nonRecoverableSignatureBenchmark(BenchmarkState state) {
-        long ctx = NativeSecp256k1.contextCreate();
-        byte[] sig = NativeSecp256k1.sign(ctx, state.digest, state.key.key());
-        NativeSecp256k1.contextCleanup(ctx);
-    }
-
-    @Benchmark
-    public void keccak256Benchmark(BenchmarkState state) {
-        Keccak256.digest(state.bitstring1);
-    }
-
-    @Benchmark
-    public void createContextBenchmark(BenchmarkState state) {
-        long ctx = NativeSecp256k1.contextCreate();
-        NativeSecp256k1.contextCleanup(ctx);
-    }
-
-    @Benchmark
-    public void concat3BytesBenchmark(BenchmarkState state) {
-        EthUtils.concat(state.bitstring1, state.bitstring2, state.bitstring3);
+        float x = (float) Math.random();
     }
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(Benchmarks.class.getSimpleName())
+                .include(RandomBenchmarks.class.getSimpleName())
                 .forks(1)
                 .build();
 
